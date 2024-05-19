@@ -26,7 +26,7 @@ function Page() {
       setToken(res.data.token);
       setUser(res.data.user);
       setRefreshToken(res.data.refreshToken);
-      navigate.push("/");
+      navigate.push("/admin");
     } catch (error) {
       console.log(error);
     }

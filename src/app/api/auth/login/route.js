@@ -1,6 +1,6 @@
 import connectDB from "@/db/connectDB";
 import User from "@/models/user.model";
-
+import { NextResponse } from "next/server";
 const generateTokenAndRefreshTokens = async (userid) => {
   try {
     const user = await User.findById(userid);
@@ -19,26 +19,23 @@ export async function POST(request) {
   try {
     const { email, password } = await request.json();
     if (!email || !password)
-      return new Response(
-        JSON.stringify({ message: "Please fill all fields" }),
-        {
-          status: 400,
-        }
+      return NextResponse.json(
+        { message: "Please fill all fields" },
+        { status: 400 }
       );
 
     const user = await User.findOne({ email }).select("+password");
 
     if (!user)
-      return new Response(JSON.stringify({ message: "User not found" }), {
-        status: 400,
-      });
+      return NextResponse.json({ message: "User not found" }, { status: 400 });
 
     const isPasswordCorrect = await user.isPasswordCorrect(password);
 
     if (!isPasswordCorrect)
-      return new Response(JSON.stringify({ message: "Invalid Password" }), {
-        status: 400,
-      });
+      return NextResponse.json(
+        { message: "Invalid Password" },
+        { status: 400 }
+      );
 
     const { token, refreshToken } = await generateTokenAndRefreshTokens(
       user._id
@@ -50,26 +47,29 @@ export async function POST(request) {
 
     const options = {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
     };
 
-    return new Response(
-      JSON.stringify({
+    const tokenCookie = `token=${token}; HttpOnly; Secure=${options.secure}; SameSite=${options.sameSite}; Path=${options.path}; Max-Age=${options.maxAge}`;
+    const refreshTokenCookie = `refreshToken=${refreshToken}; HttpOnly; Secure=${options.secure}; SameSite=${options.sameSite}; Path=${options.path}; Max-Age=${options.maxAge}`;
+
+    return NextResponse.json(
+      {
         user: loggedInUser,
-        token,
-        refreshToken,
-        options,
         message: "User Logged In Successfully",
-      }),
+      },
       {
         status: 200,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Set-Cookie": [tokenCookie, refreshTokenCookie],
+        },
       }
     );
   } catch (error) {
     console.log("error in login route", error);
-    return new Response(JSON.stringify({ message: "Internal Server Error" }), {
-      status: 500,
-    });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

@@ -1,25 +1,25 @@
 import connectDB from "@/db/connectDB";
 import User from "@/models/user.model.js";
+import { NextResponse } from "next/server";
 
 export async function POST(request) {
   await connectDB();
   try {
     const { username, name, email, password } = await request.json();
-    console.log(username, name, email, password);
+
     if (!username || !password || !email || !name)
-      return new Response(
-        JSON.stringify({ message: "Please fill all fields" }),
-        {
-          status: 400,
-        }
+      return NextResponse.json(
+        { message: "Please fill all fields" },
+        { status: 400 }
       );
 
     const alreadyUser = await User.findOne({ username });
 
     if (alreadyUser) {
-      return new Response(JSON.stringify({ message: "User already exists" }), {
-        status: 400,
-      });
+      return NextResponse.json(
+        { message: "User already exists" },
+        { status: 400 }
+      );
     }
 
     const newUser = await User.create({
@@ -34,23 +34,16 @@ export async function POST(request) {
     );
 
     if (!createdUser)
-      return new Response(
-        JSON.stringify({ message: "error while registering User" }),
-        {
-          status: 500,
-        }
+      return NextResponse.json(
+        { message: "Error while creating new user" },
+        { status: 500 }
       );
 
-    return new Response(
-      JSON.stringify({ message: "User Created Successfully!" }),
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }
+    return NextResponse.json(
+      { message: "User Created successfully" },
+      { status: 200 }
     );
   } catch (error) {
-    return new Response(JSON.stringify({ message: error.message }), {
-      status: 500,
-    });
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

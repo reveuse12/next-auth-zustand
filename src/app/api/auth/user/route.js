@@ -1,8 +1,4 @@
-// src/app/api/auth/user/route.js
-
+import { NextResponse } from "next/server";
 export async function GET(request) {
-  return new Response(JSON.stringify({ message: "Hello, World!" }), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+  return NextResponse.json({ message: "hello user" }, { status: 500 });
 }
