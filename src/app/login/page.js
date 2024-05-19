@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 import { AuthStore } from "@/store/store";
 import { useRouter } from "next/navigation";
 
@@ -26,9 +27,11 @@ function Page() {
       setToken(res.data.token);
       setUser(res.data.user);
       setRefreshToken(res.data.refreshToken);
+      toast.success("Login Successful");
       navigate.push("/admin");
     } catch (error) {
       console.log(error);
+      toast.error("Login Failed");
     }
   };
 

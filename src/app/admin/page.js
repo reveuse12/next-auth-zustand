@@ -2,6 +2,7 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const UserProfile = () => {
   const router = useRouter();
@@ -14,9 +15,11 @@ const UserProfile = () => {
       await axios.get("api/auth/logout", {
         withCredentials: true,
       });
+      toast.success("Logged out successfully");
       router.push("/login");
     } catch (error) {
       console.log(error.message);
+      toast.error("Error logging out");
     }
   };
 

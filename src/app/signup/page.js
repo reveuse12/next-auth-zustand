@@ -1,7 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+
 function Page() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     username: "",
     name: "",
@@ -15,12 +19,13 @@ function Page() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle form submission logic here (e.g., send data to server)
-    console.log("Form Submitted:", formData);
     try {
       const res = await axios.post("api/auth/signup", formData);
+      toast.success("Register Successful");
+      router.push("/login");
     } catch (error) {
       console.log(error);
+      toast.error("Register Failed");
     }
   };
 
@@ -79,17 +84,6 @@ function Page() {
             />
           </div>
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <input
-                id="remember_me"
-                name="remember_me"
-                type="checkbox"
-                className="w-4 h-4 text-indigo-600 focus:ring-indigo-500"
-              />
-              <label for="remember_me" className="text-sm text-gray-700">
-                Remember me
-              </label>
-            </div>
             <button
               type="submit"
               className="inline-flex items-center px-4 py-2 rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
