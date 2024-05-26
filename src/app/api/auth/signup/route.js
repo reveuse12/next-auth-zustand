@@ -1,7 +1,7 @@
 import connectDB from "@/db/connectDB";
 import User from "@/models/user.model.js";
 import { NextResponse } from "next/server";
-import { EmailTemplate } from "@/helpers/emailTemplate";
+import { EmailTemplate } from "@/helpers/EmailTemplate";
 import { Resend } from "resend";
 
 export async function POST(request) {
