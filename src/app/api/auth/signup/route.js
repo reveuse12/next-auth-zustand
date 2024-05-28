@@ -1,14 +1,11 @@
 import connectDB from "@/db/connectDB";
 import User from "@/models/user.model.js";
 import { NextResponse } from "next/server";
-import { EmailTemplate } from "@/helpers/EmailTemplate";
-import { Resend } from "resend";
+import { sendEmail } from "@/helpers/SendEmail";
 
 export async function POST(request) {
   await connectDB();
   try {
-    const resend = new Resend(process.env.RESEND_API_KEY);
-
     const { username, name, email, password } = await request.json();
 
     if (!username || !password || !email || !name)
@@ -43,15 +40,14 @@ export async function POST(request) {
         { status: 500 }
       );
 
-    await resend.emails.send({
-      from: "Dashboard <onboarding@resend.dev>",
-      to: [`${email}`],
-      subject: "Verify email",
-      react: EmailTemplate({ username: username }),
+    await sendEmail({
+      email,
+      emailType: "VERIFY",
+      userId: createdUser._id,
     });
 
     return NextResponse.json(
-      { message: "User Created successfully" },
+      { message: "Verification e-mail sent" },
       { status: 200 }
     );
   } catch (error) {

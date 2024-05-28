@@ -77,7 +77,7 @@ function Page() {
                 type="checkbox"
                 className="w-4 h-4 text-indigo-600 focus:ring-indigo-500"
               />
-              <label for="remember_me" className="text-sm text-gray-700">
+              <label htmlFor="remember_me" className="text-sm text-gray-700">
                 Remember me
               </label>
             </div>
