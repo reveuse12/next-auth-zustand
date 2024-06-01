@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
       minlength: 6,
-      maxlength: 20,
+      maxlength: 100,
     },
     isVerfied: {
       type: Boolean,

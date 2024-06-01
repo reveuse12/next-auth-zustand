@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
-      dbName: "auth-tutorial",
+      dbName: process.env.DB_NAME,
       autoCreate: true,
     });
     console.log("Database Connected");
