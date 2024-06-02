@@ -7,7 +7,8 @@ export function middleware(request) {
     path === "/login" ||
     path === "/signup" ||
     path === "/" ||
-    path === "/verifyemail";
+    path === "/verifyemail" ||
+    path === "/resetpassword";
 
   const token = request.cookies.get("token")?.value || "";
   console.log("token", "midddle ware -------------------");

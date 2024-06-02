@@ -32,7 +32,6 @@ function Page() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Form Submitted:", formData);
     try {
       const res = await axios.post("api/auth/login", formData);
       setToken(res.data.token);

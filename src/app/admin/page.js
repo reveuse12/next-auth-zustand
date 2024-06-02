@@ -19,8 +19,16 @@ const UserProfile = () => {
       toast.success("Logged out successfully");
       router.push("/login");
     } catch (error) {
-      console.log(error.message);
       toast.error("Error logging out");
+    }
+  };
+
+  const handleResetPassword = async () => {
+    try {
+      await axios.get("api/auth/resetpassword");
+      toast.success("Password reset email sent");
+    } catch (error) {
+      toast.error("Error resetting password");
     }
   };
 
@@ -61,7 +69,7 @@ const UserProfile = () => {
       <Button className="p-4 bg-red-500 rounded-lg" onClick={handleLogout}>
         Logout
       </Button>
-      <Button>Reset Password</Button>
+      <Button onClick={handleResetPassword}>Reset Password</Button>
     </div>
   );
 };
