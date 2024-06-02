@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 const Page = ({ params }) => {
   const [status, setStatus] = useState(null);
@@ -14,7 +15,9 @@ const Page = ({ params }) => {
       });
       if (response.status === 200) {
         setStatus("success");
-        router.push("/login");
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
       }
     } catch (error) {
       setStatus("error");
@@ -22,25 +25,27 @@ const Page = ({ params }) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-500">
-      <div className="bg-white text-black p-6 rounded-lg shadow-lg">
-        <h1 className="text-2xl font-bold mb-4">Email Verification</h1>
-        <p className="mb-4">
+    <div className="flex items-center justify-center min-h-screen bg-gray-200 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="bg-white text-center p-8 rounded-lg shadow-2xl w-full max-w-md">
+        <h1 className="text-4xl font-extrabold text-gray-900 mb-6">
+          Email Verification
+        </h1>
+        <p className="text-gray-700 mb-6">
           Click the button below to verify your email address.
         </p>
-        <button
+        <Button
           onClick={handleVerification}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+          className="bg-indigo-600 text-white px-6 py-3 rounded-md font-medium hover:bg-indigo-700 transition duration-300"
         >
           Verify Email
-        </button>
+        </Button>
         {status === "success" && (
-          <p className="mt-4 text-green-500">
+          <p className="mt-6 text-green-600 font-semibold">
             Email verified successfully! Redirecting...
           </p>
         )}
         {status === "error" && (
-          <p className="mt-4 text-red-500">
+          <p className="mt-6 text-red-600 font-semibold">
             Verification failed. Please try again.
           </p>
         )}

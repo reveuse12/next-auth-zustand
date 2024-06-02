@@ -4,6 +4,17 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { AuthStore } from "@/store/store";
 import { useRouter } from "next/navigation";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 
 function Page() {
   const navigate = useRouter();
@@ -36,60 +47,61 @@ function Page() {
   };
 
   return (
-    <div className="min-h-full h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 rounded-lg shadow-md bg-white">
-        <div className="px-5 py-4 border-b border-gray-200">
-          <h2 className="text-center text-3xl font-extrabold text-gray-900">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="max-w-md w-full space-y-8 rounded-lg shadow-lg bg-white">
+        <CardHeader className="px-6 py-4 border-b border-gray-200">
+          <CardTitle className="text-center text-4xl font-bold text-gray-900">
             Login
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          </CardTitle>
+          <CardDescription className="mt-2 text-center text-sm text-gray-600">
             Welcome Back!
-          </p>
-        </div>
-        <form className="space-y-6 px-5 pb-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              placeholder="Email Address"
-              onChange={handleChange}
-              value={formData.email}
-            />
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              placeholder="Password"
-              onChange={handleChange}
-              value={formData.password}
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <input
-                id="remember_me"
-                name="remember_me"
-                type="checkbox"
-                className="w-4 h-4 text-indigo-600 focus:ring-indigo-500"
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-6 px-6 pb-6" onSubmit={handleSubmit}>
+            <div className="space-y-4">
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                required
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="Email Address"
+                onChange={handleChange}
+                value={formData.email}
               />
-              <label htmlFor="remember_me" className="text-sm text-gray-700">
-                Remember me
-              </label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                required
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="Password"
+                onChange={handleChange}
+                value={formData.password}
+              />
             </div>
-            <button
-              type="submit"
-              className="inline-flex items-center px-4 py-2 rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Login
-            </button>
-          </div>
-        </form>
-      </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="remember_me"
+                  name="remember_me"
+                  className="w-4 h-4 text-indigo-600 focus:ring-indigo-500"
+                />
+                <label htmlFor="remember_me" className="text-sm text-gray-700">
+                  Remember me
+                </label>
+              </div>
+              <Button
+                type="submit"
+                className="inline-flex items-center px-4 py-2 rounded-md shadow-md font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150"
+              >
+                Login
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -57,9 +58,10 @@ const UserProfile = () => {
       ) : (
         <p>No user data available.</p>
       )}
-      <button className="p-4 bg-red-500 rounded-lg" onClick={handleLogout}>
+      <Button className="p-4 bg-red-500 rounded-lg" onClick={handleLogout}>
         Logout
-      </button>
+      </Button>
+      <Button>Reset Password</Button>
     </div>
   );
 };
