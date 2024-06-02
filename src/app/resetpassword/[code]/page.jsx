@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 
 const Page = ({ params }) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: "",
@@ -21,6 +22,7 @@ const Page = ({ params }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       if (formData.password !== formData.confirmPassword) {
         return toast.error("Passwords do not match!");
       }
@@ -33,6 +35,8 @@ const Page = ({ params }) => {
       router.push("/login");
     } catch (error) {
       toast.error("Error resetting password");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,9 +75,10 @@ const Page = ({ params }) => {
             <div className="flex items-center">
               <Button
                 type="submit"
+                disabled={loading}
                 className="inline-flex items-center px-4 py-2 rounded-md shadow-md font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150"
               >
-                Reset Password
+                {loading ? "Loading..." : "Reset Password"}
               </Button>
             </div>
           </form>

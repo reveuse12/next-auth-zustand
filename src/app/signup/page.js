@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 
 function Page() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     name: "",
@@ -30,12 +31,15 @@ function Page() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      setLoading(true);
       const res = await axios.post("api/auth/signup", formData);
       toast.success("Register Successful");
       router.push("/login");
     } catch (error) {
       console.log(error);
       toast.error("Register Failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -97,9 +101,10 @@ function Page() {
             <div className="flex items-center justify-center">
               <Button
                 type="submit"
+                disabled={loading}
                 className="inline-flex items-center px-4 py-2 rounded-md shadow-md font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150"
               >
-                Register
+                {loading ? "Registering..." : "Register"}
               </Button>
             </div>
           </form>

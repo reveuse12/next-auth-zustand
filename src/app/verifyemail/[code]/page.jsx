@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 
 const Page = ({ params }) => {
   const [status, setStatus] = useState(null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleVerification = async () => {
     try {
+      setLoading(true);
       const response = await axios.post(`/api/auth/verifyemail`, {
         code: params.code,
       });
@@ -21,6 +23,8 @@ const Page = ({ params }) => {
       }
     } catch (error) {
       setStatus("error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -35,9 +39,10 @@ const Page = ({ params }) => {
         </p>
         <Button
           onClick={handleVerification}
+          disabled={loading}
           className="bg-indigo-600 text-white px-6 py-3 rounded-md font-medium hover:bg-indigo-700 transition duration-300"
         >
-          Verify Email
+          {loading ? "Verifying..." : "Verify Email"}
         </Button>
         {status === "success" && (
           <p className="mt-6 text-green-600 font-semibold">

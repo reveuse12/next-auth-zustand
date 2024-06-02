@@ -21,6 +21,7 @@ function Page() {
   const setToken = AuthStore((state) => state.setToken);
   const setUser = AuthStore((state) => state.setUser);
   const setRefreshToken = AuthStore((state) => state.setRefreshToken);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -33,6 +34,7 @@ function Page() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      setLoading(true);
       const res = await axios.post("api/auth/login", formData);
       setToken(res.data.token);
       setUser(res.data.user);
@@ -40,8 +42,9 @@ function Page() {
       toast.success("Login Successful");
       navigate.push("/admin");
     } catch (error) {
-      console.log(error);
       toast.error("Login Failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,9 +96,10 @@ function Page() {
               </div>
               <Button
                 type="submit"
+                disabled={loading}
                 className="inline-flex items-center px-4 py-2 rounded-md shadow-md font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition ease-in-out duration-150"
               >
-                Login
+                {loading ? "Logging in..." : "Login"}
               </Button>
             </div>
           </form>
