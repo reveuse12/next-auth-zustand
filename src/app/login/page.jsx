@@ -39,12 +39,12 @@ function Page() {
       setUser(res.data.user);
       setRefreshToken(res.data.refreshToken);
       toast.success("Login Successful");
+
       if (res.data.user.isAdmin === true) {
         navigate.push("/admin");
       } else {
         navigate.push("/dashboard");
       }
-      navigate.push("/admin");
     } catch (error) {
       toast.error("Login Failed");
     } finally {
