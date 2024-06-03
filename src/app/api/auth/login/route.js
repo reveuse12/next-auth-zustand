@@ -1,6 +1,7 @@
 import connectDB from "@/db/connectDB";
 import User from "@/models/user.model";
 import { NextResponse } from "next/server";
+
 const generateTokenAndRefreshTokens = async (userid) => {
   try {
     const user = await User.findById(userid);
@@ -24,10 +25,16 @@ export async function POST(request) {
         { status: 400 }
       );
 
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email }).select("+password+isVerfied");
 
     if (!user)
       return NextResponse.json({ message: "User not found" }, { status: 400 });
+
+    if (!user.isVerfied)
+      return NextResponse.json(
+        { message: "Account not verified. Please verify your account." },
+        { status: 401 }
+      );
 
     const isPasswordCorrect = await user.isPasswordCorrect(password);
 
