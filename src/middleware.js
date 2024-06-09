@@ -12,7 +12,7 @@ export function middleware(request) {
   ].includes(path);
 
   const token = request.cookies.get("token")?.value || "";
-  console.log("token", "midddle ware -------------------");
+  console.log(token ? "token" : "no token", "midddle ware -------------------");
 
   if (isPublicPath && token) {
     return NextResponse.redirect(new URL("/admin", request.nextUrl));
@@ -29,6 +29,7 @@ export const config = {
   matcher: [
     "/",
     "/admin",
+    "/dashboard",
     "/login",
     "/signup",
     "/verifyemail",

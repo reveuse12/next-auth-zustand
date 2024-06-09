@@ -8,12 +8,14 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import Link from "next/link";
 
 function Page() {
   const navigate = useRouter();
@@ -64,8 +66,8 @@ function Page() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-6 px-6 pb-6" onSubmit={handleSubmit}>
-            <div className="space-y-4">
+          <form className="space-y-6 px-6" onSubmit={handleSubmit}>
+            <div className="space-y-2">
               <Input
                 id="email"
                 name="email"
@@ -87,17 +89,7 @@ function Page() {
                 value={formData.password}
               />
             </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="remember_me"
-                  name="remember_me"
-                  className="w-4 h-4 text-indigo-600 focus:ring-indigo-500"
-                />
-                <label htmlFor="remember_me" className="text-sm text-gray-700">
-                  Remember me
-                </label>
-              </div>
+            <div className="flex items-center justify-center">
               <Button
                 type="submit"
                 disabled={loading}
@@ -108,6 +100,17 @@ function Page() {
             </div>
           </form>
         </CardContent>
+        <CardFooter className="justify-center px-6 py-4 border-t border-gray-200">
+          <p className="text-sm text-gray-600">
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/signup"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              Sign Up
+            </Link>
+          </p>
+        </CardFooter>
       </Card>
     </div>
   );
