@@ -1,4 +1,3 @@
-import connectDB from "@/db/connectDB";
 import User from "@/models/user.model";
 import { NextResponse } from "next/server";
 
@@ -16,7 +15,6 @@ const generateTokenAndRefreshTokens = async (userid) => {
 };
 
 export async function POST(request) {
-  await connectDB();
   try {
     const { email, password } = await request.json();
     if (!email || !password)

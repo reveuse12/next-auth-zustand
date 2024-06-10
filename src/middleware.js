@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
+import * as jwt from "jsonwebtoken";
 
-export function middleware(request) {
+export async function middleware(request) {
   const path = request.nextUrl.pathname;
 
   const isPublicPath = [
@@ -12,7 +13,14 @@ export function middleware(request) {
   ].includes(path);
 
   const token = request.cookies.get("token")?.value || "";
-  console.log(token ? "token" : "no token", "midddle ware -------------------");
+  // const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+  // if (!decodedToken)
+  //   return NextResponse.json({ message: "Invalid token" }, { status: 400 });
+  // console.log(
+  //   token ? decodedToken : "no token",
+  //   "midddle ware -------------------"
+  // );
 
   if (isPublicPath && token) {
     return NextResponse.redirect(new URL("/admin", request.nextUrl));

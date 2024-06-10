@@ -1,5 +1,4 @@
 import "./globals.css";
-import { Toaster } from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { Inter as FontSans } from "next/font/google";
 
@@ -22,7 +21,7 @@ export default function RootLayout({ children }) {
           fontSans.variable
         )}
       >
-        {children} <Toaster />
+        {children}
       </body>
     </html>
   );

@@ -1,4 +1,3 @@
-import connectDB from "@/db/connectDB";
 import User from "@/models/user.model";
 import { NextResponse } from "next/server";
 import * as jwt from "jsonwebtoken";
@@ -6,8 +5,6 @@ import { sendEmail } from "@/helpers/SendEmail";
 
 export async function POST(request) {
   try {
-    await connectDB();
-
     const { code, password } = await request.json();
 
     const user = await User.findOne({
@@ -37,8 +34,6 @@ export async function POST(request) {
 
 export async function GET(request) {
   try {
-    await connectDB();
-
     const token = request.cookies.get("token")?.value || "";
 
     if (!token)
