@@ -12,13 +12,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import toast from "react-hot-toast";
 import { MenuIcon } from "lucide-react";
 import { DashboardNav } from "./dashboard-nav";
 import { navItems } from "@/app/dashboard/layout";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 
 const MobileSidebar = () => {
   return (
@@ -77,20 +75,6 @@ const MobileSidebarContent = ({ className }) => {
 };
 
 const UserNav = () => {
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    localStorage.removeItem("auth");
-    try {
-      await axios.get("api/auth/logout", {
-        withCredentials: true,
-      });
-      toast.success("Logged out successfully");
-      router.push("/login");
-    } catch (error) {
-      toast.error("Error logging out");
-    }
-  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -127,8 +111,8 @@ const UserNav = () => {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout}>
-          Log out
+        <DropdownMenuItem>
+          anothoer logout
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
