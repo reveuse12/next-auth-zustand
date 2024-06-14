@@ -14,9 +14,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MenuIcon } from "lucide-react";
 import { DashboardNav } from "./dashboard-nav";
-import { navItems } from "@/app/dashboard/layout";
-import { useState } from "react";
+import { navItems } from "@/app/admin/layout";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { AuthStore } from "@/store/store";
 
 const MobileSidebar = () => {
   return (
@@ -75,6 +79,30 @@ const MobileSidebarContent = ({ className }) => {
 };
 
 const UserNav = () => {
+  const router = useRouter();
+  const UserInfo = AuthStore((state) => state.user);
+
+  const handleLogout = async () => {
+    localStorage.removeItem("auth");
+    try {
+      await axios.get("api/auth/logout", {
+        withCredentials: true,
+      });
+      toast.success("Logged out successfully");
+      router.push("/login");
+    } catch (error) {
+      toast.error("Error logging out");
+    }
+  };
+
+  const handleResetPassword = async () => {
+    try {
+      await axios.get("api/auth/resetpassword");
+      toast.success("Password reset email sent");
+    } catch (error) {
+      toast.error("Error resetting password");
+    }
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -86,11 +114,9 @@ const UserNav = () => {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">
-              {/* {session.user?.name} */}Prayag Bagthariya
-            </p>
+            <p className="text-sm font-medium leading-none">{UserInfo?.name}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              {/* {session.user?.email} */}user@prayag.com
+              {UserInfo?.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -108,11 +134,13 @@ const UserNav = () => {
             Settings
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>New Team</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleResetPassword}>
+            Reset Password
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          anothoer logout
+        <DropdownMenuItem onClick={handleLogout}>
+          Logout
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
