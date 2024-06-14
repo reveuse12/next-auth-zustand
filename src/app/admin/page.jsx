@@ -17,12 +17,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { AuthStore } from "@/store/store";
+import DataTable from "@/components/table/table";
 
 const Page = () => {
   const router = useRouter();
@@ -34,12 +44,11 @@ const Page = () => {
   return (
     <ScrollArea className="h-screen">
       {UserInfo ? (
-        <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
+        <div className="flex-1 space-y-4 md:p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">
               Hello, {UserInfo?.username}
             </h2>
-            {/* <p className="text-3xl font-bold tracking-tight">Welcome back 👋</p> */}
             <div className="hidden md:flex items-center space-x-2">
               {/* <CalendarDateRangePicker /> */}
               <Dialog>
@@ -50,8 +59,7 @@ const Page = () => {
                   <DialogHeader>
                     <DialogTitle>Edit profile</DialogTitle>
                     <DialogDescription>
-                      Make changes to your profile here. Click save when
-                      you&lsquo;re done.
+                      Add employee to you organisation
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
@@ -64,16 +72,36 @@ const Page = () => {
                         value="Pedro Duarte"
                         className="col-span-3"
                       />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="username" className="text-right">
-                        Username
+                      <Label htmlFor="name" className="text-right">
+                        Department
                       </Label>
                       <Input
-                        id="username"
-                        value="@peduarte"
+                        id="name"
+                        value="Pedro Duarte"
                         className="col-span-3"
                       />
+                      <Label htmlFor="name" className="text-right">
+                        Salary
+                      </Label>
+                      <Input
+                        id="name"
+                        value="Pedro Duarte"
+                        className="col-span-3"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Select>
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Gender" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectItem value="male">Male</SelectItem>
+                            <SelectItem value="female">Female</SelectItem>
+                            <SelectItem value="other">other</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                   <DialogFooter>
@@ -202,7 +230,7 @@ const Page = () => {
                     <CardTitle>Overview</CardTitle>
                   </CardHeader>
                   <CardContent className="pl-2">
-                    {/* <Overview /> */}
+                    <DataTable />
                   </CardContent>
                 </Card>
                 <Card className="col-span-4 md:col-span-3">
