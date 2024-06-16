@@ -1,8 +1,10 @@
+import connectDB from "@/db/connectDB";
 import User from "@/models/user.model";
 import { NextResponse } from "next/server";
 
 const generateTokenAndRefreshTokens = async (userid) => {
   try {
+    await connectDB();
     const user = await User.findById(userid);
     const token = user.generateToken();
     const refreshToken = user.generateRefreshToken();
