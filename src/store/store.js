@@ -32,6 +32,7 @@ export const useConfigurationsStore = create(
       configurations: {
         jobs: [],
         departments: [],
+        employees: [],
       },
       setConfigurations: (configurations) => set({ configurations }),
     }),

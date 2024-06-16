@@ -22,7 +22,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -78,8 +77,15 @@ const Page = () => {
   useEffect(() => {
     const getConfigurations = async () => {
       try {
-        const res = await axios.get("/api/auth/config");
-        setConfigurations(res.data);
+        const [configRes, employee] = await Promise.all([
+          axios.get("/api/auth/config"),
+          axios.get("/api/auth/addemployee"),
+        ]);
+        setConfigurations({
+          jobs: configRes.data.jobs,
+          departments: configRes.data.departments,
+          employees: employee.data.employees,
+        });
       } catch (error) {
         console.error(error);
         toast.error("Something went wrong");
@@ -284,7 +290,9 @@ const Page = () => {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">$45,231.89</div>
+                    <div className="text-2xl font-bold">
+                      {configurations.employees.length}
+                    </div>
                     <p className="text-xs text-muted-foreground">
                       +20.1% from last month
                     </p>
@@ -362,7 +370,9 @@ const Page = () => {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
+                    <div className="text-2xl font-bold">
+                      {configurations.employees.length}
+                    </div>
                     <p className="text-xs text-muted-foreground">
                       +201 since last hour
                     </p>
@@ -375,7 +385,7 @@ const Page = () => {
                     <CardTitle>Overview</CardTitle>
                   </CardHeader>
                   <CardContent className="pl-2">
-                    <DataTable />
+                    <DataTable employees={configurations.employees} />
                   </CardContent>
                 </Card>
                 <Card className="col-span-4 md:col-span-3">

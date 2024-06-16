@@ -41,7 +41,6 @@ function Page() {
       setUser(res.data.user);
       setRefreshToken(res.data.refreshToken);
       toast.success("Login Successful");
-
       navigate.push("/admin");
     } catch (error) {
       toast.error("Login Failed");
