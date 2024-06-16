@@ -25,3 +25,19 @@ export const AuthStore = create(
     }
   )
 );
+
+export const useConfigurationsStore = create(
+  persist(
+    (set) => ({
+      configurations: {
+        jobs: [],
+        departments: [],
+      },
+      setConfigurations: (configurations) => set({ configurations }),
+    }),
+    {
+      name: "configurations",
+      storage,
+    }
+  )
+);

@@ -27,19 +27,67 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { AuthStore } from "@/store/store";
+import { AuthStore, useConfigurationsStore } from "@/store/store";
 import DataTable from "@/components/table/table";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const Page = () => {
   const router = useRouter();
   const UserInfo = AuthStore((state) => state.user);
-  const handleAddEmployee = () => {
-    router.push("/add-employee");
+  const { configurations, setConfigurations } = useConfigurationsStore(
+    (state) => ({
+      configurations: state.configurations,
+      setConfigurations: state.setConfigurations,
+    })
+  );
+  const [formData, setFormData] = useState({
+    name: "",
+    salary: undefined,
+    departmentName: "",
+    gender: "",
+    jobRole: "",
+    contactInfo: "",
+  });
+
+  const handleAddEmployee = async (e) => {
+    console.log(formData, "added employee");
+    try {
+      e.preventDefault();
+      await axios.post("api/auth/addemployee", formData);
+      toast.success("Employee added successfully");
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setFormData({
+        name: "",
+        salary: undefined,
+        departmentName: "",
+        gender: "",
+        jobRole: "",
+        contactInfo: "",
+      });
+    }
   };
+
+  useEffect(() => {
+    const getConfigurations = async () => {
+      try {
+        const res = await axios.get("/api/auth/config");
+        setConfigurations(res.data);
+      } catch (error) {
+        console.error(error);
+        toast.error("Something went wrong");
+      }
+    };
+
+    getConfigurations();
+  }, [setConfigurations]);
 
   return (
     <ScrollArea className="h-screen">
@@ -52,14 +100,16 @@ const Page = () => {
             <div className="hidden md:flex items-center space-x-2">
               {/* <CalendarDateRangePicker /> */}
               <Dialog>
-                <DialogTrigger className="py-2 px-4 bg-black text-white rounded-lg">
+                <DialogTrigger className="py-2 px-4 bg-primary text-white rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50">
                   Add Employee
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-[425px] p-6 bg-white rounded-lg shadow-lg">
                   <DialogHeader>
-                    <DialogTitle>Edit profile</DialogTitle>
-                    <DialogDescription>
-                      Add employee to you organisation
+                    <DialogTitle className="text-2xl font-semibold text-gray-800">
+                      Add Employee
+                    </DialogTitle>
+                    <DialogDescription className="text-sm text-gray-600">
+                      Add an employee to your organization
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
@@ -69,43 +119,138 @@ const Page = () => {
                       </Label>
                       <Input
                         id="name"
-                        value="Pedro Duarte"
-                        className="col-span-3"
-                      />
-                      <Label htmlFor="name" className="text-right">
-                        Department
-                      </Label>
-                      <Input
-                        id="name"
-                        value="Pedro Duarte"
-                        className="col-span-3"
-                      />
-                      <Label htmlFor="name" className="text-right">
-                        Salary
-                      </Label>
-                      <Input
-                        id="name"
-                        value="Pedro Duarte"
+                        value={formData.name}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
                         className="col-span-3"
                       />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Select>
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Gender" />
+                      <Label htmlFor="contactInfo" className="text-right">
+                        Contact Info
+                      </Label>
+                      <Input
+                        id="contactInfo"
+                        value={formData.contactInfo}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            contactInfo: e.target.value,
+                          })
+                        }
+                        className="col-span-3"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label
+                        htmlFor="gender"
+                        className="text-right text-gray-700"
+                      >
+                        Gender
+                      </Label>
+                      <RadioGroup
+                        value={formData.gender}
+                        onValueChange={(value) =>
+                          setFormData({ ...formData, gender: value })
+                        }
+                      >
+                        <div className="col-span-3 flex items-center space-x-4">
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="female" id="r1" />
+                            <Label htmlFor="r1" className="text-gray-700">
+                              Female
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="male" id="r2" />
+                            <Label htmlFor="r2" className="text-gray-700">
+                              Male
+                            </Label>
+                          </div>
+                        </div>
+                      </RadioGroup>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label
+                        htmlFor="department"
+                        className="text-right text-gray-700"
+                      >
+                        Department
+                      </Label>
+                      <Select
+                        value={formData.departmentName}
+                        onValueChange={(value) =>
+                          setFormData({ ...formData, departmentName: value })
+                        }
+                      >
+                        <SelectTrigger className="col-span-3 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                          <SelectValue placeholder="Select a department" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
-                            <SelectItem value="male">Male</SelectItem>
-                            <SelectItem value="female">Female</SelectItem>
-                            <SelectItem value="other">other</SelectItem>
+                            {configurations.departments?.map((department) => (
+                              <SelectItem
+                                key={department._id}
+                                value={department._id}
+                              >
+                                {department.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label
+                        htmlFor="salary"
+                        className="text-right text-gray-700"
+                      >
+                        Salary
+                      </Label>
+                      <Input
+                        id="salary"
+                        value={formData.salary}
+                        onChange={(e) =>
+                          setFormData({ ...formData, salary: e.target.value })
+                        }
+                        className="col-span-3 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label
+                        htmlFor="jobRole"
+                        className="text-right text-gray-700"
+                      >
+                        Job Role
+                      </Label>
+                      <Select
+                        value={formData.jobRole}
+                        onValueChange={(value) =>
+                          setFormData({ ...formData, jobRole: value })
+                        }
+                      >
+                        <SelectTrigger className="col-span-3 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                          <SelectValue placeholder="Select a Role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {configurations.jobs?.map((job) => (
+                              <SelectItem key={job._id} value={job._id}>
+                                {job.title}
+                              </SelectItem>
+                            ))}
                           </SelectGroup>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
-                  <DialogFooter>
-                    <Button type="submit" onClick={handleAddEmployee}>
+                  <DialogFooter className="flex justify-end">
+                    <Button
+                      type="submit"
+                      onClick={handleAddEmployee}
+                      className="bg-primary text-white rounded-lg py-2 px-4 hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+                    >
                       Save changes
                     </Button>
                   </DialogFooter>

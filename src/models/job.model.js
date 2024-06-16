@@ -4,11 +4,12 @@ const jobschema = new mongoose.Schema(
   {
     title: {
       type: String,
+      unique: true,
+      trim: true,
       required: true,
     },
     description: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true }

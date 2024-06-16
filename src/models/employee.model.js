@@ -8,18 +8,20 @@ const employeeschema = new mongoose.Schema(
     },
     gender: {
       type: String,
-      enum: [male, female, other],
+      enum: ["male", "female", "other"],
       required: true,
     },
-    departmentID: {
+    departmentName: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Department",
       required: true,
+      index: true,
     },
-    jobID: {
+    jobRole: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Job",
       required: true,
+      index: true,
     },
     contactInfo: {
       type: String,
@@ -31,19 +33,20 @@ const employeeschema = new mongoose.Schema(
     },
     leaves: {
       type: Number,
-      required: true,
+      default: 12,
     },
     performanceReview: {
       type: String,
-      required: true,
+      default: "No review yet",
     },
     status: {
       type: String,
-      required: true,
+      enum: ["active", "inactive", "terminated"],
+      default: "active",
     },
     hireDate: {
       type: Date,
-      required: true,
+      default: Date.now,
     },
   },
   { timestamps: true }
