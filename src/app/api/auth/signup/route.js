@@ -1,9 +1,11 @@
 import User from "@/models/user.model.js";
 import { NextResponse } from "next/server";
 import { sendEmail } from "@/helpers/SendEmail";
+import connectDB from "@/db/connectDB";
 
 export async function POST(request) {
   try {
+    await connectDB();
     const { username, name, email, password } = await request.json();
 
     if (!username || !password || !email || !name)

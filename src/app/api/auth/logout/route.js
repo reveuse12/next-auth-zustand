@@ -1,7 +1,9 @@
+import connectDB from "@/db/connectDB";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {
   try {
+    await connectDB();
     const token = request.cookies.get("token");
     if (!token) {
       return NextResponse.json({ error: "Not logged in" }, { status: 401 });

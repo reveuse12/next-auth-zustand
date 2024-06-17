@@ -18,6 +18,7 @@ const generateTokenAndRefreshTokens = async (userid) => {
 
 export async function POST(request) {
   try {
+    await connectDB();
     const { email, password } = await request.json();
     if (!email || !password)
       return NextResponse.json(

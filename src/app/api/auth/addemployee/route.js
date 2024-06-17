@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request) {
   try {
+    await connectDB();
     const token = request.cookies.get("token")?.value;
 
     if (!token) {

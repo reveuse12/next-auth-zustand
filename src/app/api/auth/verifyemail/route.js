@@ -1,8 +1,10 @@
+import connectDB from "@/db/connectDB";
 import User from "@/models/user.model";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
   try {
+    await connectDB();
     const { code } = await request.json();
     console.log("Received code:", code);
 

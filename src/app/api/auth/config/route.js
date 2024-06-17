@@ -2,9 +2,11 @@ import { NextResponse } from "next/server";
 import * as jwt from "jsonwebtoken";
 import Department from "@/models/department.model";
 import Job from "@/models/job.model";
+import connectDB from "@/db/connectDB";
 
 export async function GET(request) {
   try {
+    await connectDB();
     const token = request.cookies.get("token")?.value;
 
     if (!token) {
@@ -37,6 +39,7 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
+    await connectDB();
     const { departmentName, departmentDescription, jobRole, jobDescription } =
       await request.json();
 
