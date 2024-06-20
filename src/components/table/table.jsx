@@ -35,6 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import toast from "react-hot-toast";
 
 export const columns = [
   {
@@ -118,8 +119,7 @@ export const columns = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
-
+      const userID = row.original._id;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -131,9 +131,16 @@ export const columns = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={async (userID) => {
+                try {
+                  await axios.delete(`/api/employees/${userID}`);
+                  toast.success("Employee deleted");
+                } catch (error) {
+                  toast.error("Something went wrong");
+                }
+              }}
             >
-              Copy payment ID
+              Delete
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View customer</DropdownMenuItem>
@@ -150,7 +157,6 @@ export default function DataTable({ employees }) {
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
-
   const table = useReactTable({
     data: employees,
     columns,

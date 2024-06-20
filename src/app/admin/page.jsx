@@ -28,7 +28,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { AuthStore, useConfigurationsStore } from "@/store/store";
@@ -37,7 +36,6 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 const Page = () => {
-  const router = useRouter();
   const UserInfo = AuthStore((state) => state.user);
   const { configurations, setConfigurations } = useConfigurationsStore(
     (state) => ({
@@ -58,7 +56,7 @@ const Page = () => {
     console.log(formData, "added employee");
     try {
       e.preventDefault();
-      await axios.post("api/auth/addemployee", formData);
+      await axios.post("api/auth/employee", formData);
       toast.success("Employee added successfully");
     } catch (error) {
       toast.error("Something went wrong");
@@ -79,7 +77,7 @@ const Page = () => {
       try {
         const [configRes, employee] = await Promise.all([
           axios.get("/api/auth/config"),
-          axios.get("/api/auth/addemployee"),
+          axios.get("/api/auth/employee"),
         ]);
         setConfigurations({
           jobs: configRes.data.jobs,
@@ -395,7 +393,9 @@ const Page = () => {
                       You made 265 sales this month.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>{/* <Overview2 /> */}</CardContent>
+                  <CardContent>
+                    <h3 className="text-black">OverView CHart</h3>
+                  </CardContent>
                 </Card>
               </div>
             </TabsContent>
