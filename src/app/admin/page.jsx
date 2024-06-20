@@ -291,7 +291,7 @@ const Page = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      {configurations.employees.length}
+                      {configurations?.employees?.length}
                     </div>
                     <p className="text-xs text-muted-foreground">
                       +20.1% from last month
@@ -371,7 +371,7 @@ const Page = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      {configurations.employees.length}
+                      {configurations?.employees?.length}
                     </div>
                     <p className="text-xs text-muted-foreground">
                       +201 since last hour

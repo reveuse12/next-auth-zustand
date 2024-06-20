@@ -36,39 +36,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const data = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
-];
-
 export const columns = [
   {
     id: "select",
@@ -120,13 +87,13 @@ export const columns = [
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("salary"));
 
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
+      // Format the amount as a rupee amount
+      const formatted = new Intl.NumberFormat("en-IN", {
         style: "currency",
-        currency: "USD",
+        currency: "INR",
       }).format(amount);
 
-      return <div className="text-right font-medium">{formatted}</div>;
+      return <div className="text-right font-medium">{amount}</div>;
     },
   },
   {
@@ -134,7 +101,7 @@ export const columns = [
     header: () => <div className="text-right">Role</div>,
     cell: ({ row }) => {
       const JobRoles = row.getValue("jobRole");
-      return <div className="text-right font-medium">{JobRoles.title}</div>;
+      return <div className="text-right font-medium">{JobRoles?.title}</div>;
     },
   },
   {
@@ -143,7 +110,7 @@ export const columns = [
     cell: ({ row }) => {
       const departmentNames = row.getValue("departmentName");
       return (
-        <div className="text-right font-medium">{departmentNames.name}</div>
+        <div className="text-right font-medium">{departmentNames?.name}</div>
       );
     },
   },
@@ -281,7 +248,7 @@ export default function DataTable({ employees }) {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={columns?.length}
                   className="h-24 text-center"
                 >
                   No results.
@@ -293,8 +260,8 @@ export default function DataTable({ employees }) {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {table.getFilteredSelectedRowModel()?.rows?.length} of{" "}
+          {table.getFilteredRowModel()?.rows?.length} row(s) selected.
         </div>
         <div className="space-x-2">
           <Button
