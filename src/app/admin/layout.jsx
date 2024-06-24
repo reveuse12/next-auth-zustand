@@ -6,31 +6,31 @@ import { cn } from "@/lib/utils";
 export const navItems = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/admin",
     icon: "dashboard",
     label: "Dashboard",
   },
   {
     title: "User profile",
-    href: "/dashboard/user",
+    href: "/admin/user",
     icon: "user",
     label: "user",
   },
   {
     title: "Employees",
-    href: "/dashboard/employee",
+    href: "/admin/employee",
     icon: "employee",
     label: "employee",
   },
   {
     title: "Leaves",
-    href: "/dashboard/leaves",
+    href: "/admin/leaves",
     icon: "profile",
     label: "profile",
   },
   {
     title: "Projects",
-    href: "/dashboard/projects",
+    href: "/admin/projects",
     icon: "kanban",
     label: "kanban",
   },

@@ -171,16 +171,24 @@ export async function DELETE(request) {
         { status: 200 }
       );
     }
+
     const { userID } = await request.json();
 
     if (!userID) {
       return NextResponse.json(
-        { message: "Employee not found" },
+        { message: "Employee ID is required" },
         { status: 400 }
       );
     }
 
     const deletedUser = await Employee.findByIdAndDelete(userID);
+
+    if (!deletedUser) {
+      return NextResponse.json(
+        { message: "Employee not found" },
+        { status: 404 }
+      );
+    }
 
     return NextResponse.json(
       { message: "Employee Deleted successfully!", deletedUser },
