@@ -8,10 +8,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
+import overviewChart, {
+  Overview,
+} from "@/components/overviewChart/overviewChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React, { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
 import { AuthStore, useConfigurationsStore } from "@/store/store";
 import DataTable from "@/components/table/table";
 import toast from "react-hot-toast";
@@ -187,13 +188,15 @@ const Page = () => {
                 </Card>
                 <Card className="col-span-4 md:col-span-3">
                   <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
+                    <CardTitle>Salaries Overview</CardTitle>
                     <CardDescription>
                       You made 265 sales this month.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <h3 className="text-black">OverView CHart</h3>
+                    {configurations.employees && (
+                      <Overview employees={configurations.employees} />
+                    )}
                   </CardContent>
                 </Card>
               </div>
