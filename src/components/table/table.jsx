@@ -35,6 +35,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useConfigurationsStore } from "@/store/store";
+import EmployeeDialog from "@/helpers/EmployeeDialog";
 
 export const columns = [
   {
@@ -86,13 +90,6 @@ export const columns = [
     header: () => <div className="text-right">Salary</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("salary"));
-
-      // Format the amount as a rupee amount
-      const formatted = new Intl.NumberFormat("en-IN", {
-        style: "currency",
-        currency: "INR",
-      }).format(amount);
-
       return <div className="text-right font-medium">{amount}</div>;
     },
   },
@@ -118,7 +115,19 @@ export const columns = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const userID = row.original._id;
+      const handleDelete = async () => {
+        try {
+          await axios.delete(`/api/auth/employee/${userID}`);
+          toast.success("User deleted successfully");
+        } catch (error) {
+          toast.error("Failed to delete user");
+        }
+      };
+
+      const handleSave = async (employee) => {
+        console.log(employee, "edited employee");
+      };
 
       return (
         <DropdownMenu>
@@ -130,13 +139,16 @@ export const columns = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleDelete}>Delete</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
+            <EmployeeDialog
+              triggerText="Edit"
+              className={
+                "relative flex w-full cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+              }
+              employee={row.original}
+              onSave={handleSave}
+            />
             <DropdownMenuItem>View payment details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -145,14 +157,16 @@ export const columns = [
   },
 ];
 
-export default function DataTable({ employees }) {
+export default function DataTable() {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
-
+  const { configurations } = useConfigurationsStore((state) => ({
+    configurations: state.configurations,
+  }));
   const table = useReactTable({
-    data: employees,
+    data: configurations.employees,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -170,8 +184,20 @@ export default function DataTable({ employees }) {
     },
   });
 
+  const handleSave = () => {
+    alert("new employee");
+  };
+
   return (
     <div className="w-full">
+      <EmployeeDialog
+        triggerText="Add Employee"
+        className={
+          "py-2 px-4 bg-primary text-white rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+        }
+        onSave={handleSave}
+      />
+
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter names..."
@@ -260,8 +286,8 @@ export default function DataTable({ employees }) {
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel()?.rows?.length} of{" "}
-          {table.getFilteredRowModel()?.rows?.length} row(s) selected.
+          {table.getFilteredSelectedRowModel()?.rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
         <div className="space-x-2">
           <Button
