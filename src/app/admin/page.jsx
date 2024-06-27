@@ -175,25 +175,30 @@ const Page = () => {
                   </CardContent>
                 </Card>
               </div>
-              <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
-                  <CardHeader>
-                    <CardTitle>Overview</CardTitle>
+              <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-7 p-4">
+                <Card className="col-span-4 bg-white shadow-md rounded-lg overflow-hidden">
+                  <CardHeader className="bg-gray-100 p-4">
+                    <CardTitle className="text-lg font-semibold text-gray-800">
+                      Overview
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent className="pl-2">
+                  <CardContent className="p-4">
                     {configurations.employees && (
                       <DataTable employees={configurations.employees} />
                     )}
                   </CardContent>
                 </Card>
-                <Card className="col-span-4 md:col-span-3">
-                  <CardHeader>
-                    <CardTitle>Salaries Overview</CardTitle>
-                    <CardDescription>
+
+                <Card className="col-span-4 md:col-span-3 bg-white shadow-md rounded-lg overflow-hidden">
+                  <CardHeader className="bg-gray-100 p-4">
+                    <CardTitle className="text-lg font-semibold text-gray-800">
+                      Salaries Overview
+                    </CardTitle>
+                    <CardDescription className="text-sm text-gray-600">
                       You made 265 sales this month.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-4">
                     {configurations.employees && (
                       <Overview employees={configurations.employees} />
                     )}
