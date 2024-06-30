@@ -17,6 +17,7 @@ import { AuthStore, useConfigurationsStore } from "@/store/store";
 import DataTable from "@/components/table/table";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { CalendarDateRangePicker } from "@/components/dateRangePicker/DateRangePicker";
 
 const Page = () => {
   const UserInfo = AuthStore((state) => state.user);
@@ -57,7 +58,7 @@ const Page = () => {
               Hello, {UserInfo?.username}
             </h2>
             <div className="hidden md:flex items-center space-x-2">
-              {/* <CalendarDateRangePicker /> */}
+              <CalendarDateRangePicker />
             </div>
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
@@ -175,30 +176,25 @@ const Page = () => {
                   </CardContent>
                 </Card>
               </div>
-              <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-7 p-4">
-                <Card className="col-span-4 bg-white shadow-md rounded-lg overflow-hidden">
-                  <CardHeader className="bg-gray-100 p-4">
-                    <CardTitle className="text-lg font-semibold text-gray-800">
-                      Overview
-                    </CardTitle>
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
+                <Card className="col-span-4">
+                  <CardHeader>
+                    <CardTitle>Overview</CardTitle>
                   </CardHeader>
-                  <CardContent className="p-4">
+                  <CardContent className="pl-2">
                     {configurations.employees && (
                       <DataTable employees={configurations.employees} />
                     )}
                   </CardContent>
                 </Card>
-
-                <Card className="col-span-4 md:col-span-3 bg-white shadow-md rounded-lg overflow-hidden">
-                  <CardHeader className="bg-gray-100 p-4">
-                    <CardTitle className="text-lg font-semibold text-gray-800">
-                      Salaries Overview
-                    </CardTitle>
-                    <CardDescription className="text-sm text-gray-600">
+                <Card className="col-span-4 md:col-span-3">
+                  <CardHeader>
+                    <CardTitle>Salaries Overview</CardTitle>
+                    <CardDescription>
                       You made 265 sales this month.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="p-4">
+                  <CardContent>
                     {configurations.employees && (
                       <Overview employees={configurations.employees} />
                     )}

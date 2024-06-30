@@ -116,9 +116,12 @@ export const columns = [
     enableHiding: false,
     cell: ({ row }) => {
       const userID = row.original._id;
+
       const handleDelete = async () => {
         try {
-          await axios.delete(`/api/auth/employee/${userID}`);
+          await axios.delete("/api/auth/employee", {
+            data: { userID },
+          });
           toast.success("User deleted successfully");
         } catch (error) {
           toast.error("Failed to delete user");
