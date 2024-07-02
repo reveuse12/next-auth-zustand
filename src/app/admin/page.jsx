@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Card,
@@ -8,15 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import overviewChart, {
-  Overview,
-} from "@/components/overviewChart/overviewChart";
+import { Overview } from "@/components/overviewChart/overviewChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { AuthStore, useConfigurationsStore } from "@/store/store";
 import DataTable from "@/components/table/table";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { CalendarDateRangePicker } from "@/components/dateRangePicker/DateRangePicker";
 
 const Page = () => {
   const UserInfo = AuthStore((state) => state.user);
@@ -48,6 +46,10 @@ const Page = () => {
     getConfigurations();
   }, [setConfigurations]);
 
+  let addSalaries = configurations.employees.map(
+    (salarySum) => salarySum.salary
+  );
+  let totalSalaries = addSalaries.reduce((a, b) => a + b, 0);
   return (
     <ScrollArea className="h-screen">
       {UserInfo ? (
@@ -57,7 +59,7 @@ const Page = () => {
               Hello, {UserInfo?.username}
             </h2>
             <div className="hidden md:flex items-center space-x-2">
-              {/* <CalendarDateRangePicker /> */}
+              <CalendarDateRangePicker />
             </div>
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
@@ -97,7 +99,7 @@ const Page = () => {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Current projects
+                      Current Salaries
                     </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -115,7 +117,7 @@ const Page = () => {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+2350</div>
+                    <div className="text-2xl font-bold">{totalSalaries}</div>
                     <p className="text-xs text-muted-foreground">
                       +180.1% from last month
                     </p>

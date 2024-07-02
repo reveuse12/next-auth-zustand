@@ -1,26 +1,14 @@
-import connectDB from "@/db/connectDB";
 import Employee from "@/models/employee.model";
-import * as jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
+import { verifyAdmin } from "@/helpers/decodeToken";
 
 export async function GET(request) {
   try {
-    await connectDB();
-    const token = request.cookies.get("token")?.value;
-
-    if (!token) {
+    const adminCheck = await verifyAdmin(request);
+    if (adminCheck.error) {
       return NextResponse.json(
-        { message: "You are not logged in" },
-        { status: 400 }
-      );
-    }
-
-    const decodeToken = jwt.verify(token, process.env.JWT_SECRET);
-
-    if (!decodeToken.isAdmin) {
-      return NextResponse.json(
-        { message: "You are not Admin" },
-        { status: 200 }
+        { message: adminCheck.error },
+        { status: adminCheck.status }
       );
     }
 
@@ -39,23 +27,11 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    await connectDB();
-
-    const token = request.cookies.get("token")?.value;
-
-    if (!token) {
+    const adminCheck = await verifyAdmin(request);
+    if (adminCheck.error) {
       return NextResponse.json(
-        { message: "You are not logged in" },
-        { status: 400 }
-      );
-    }
-
-    const decodeToken = jwt.verify(token, process.env.JWT_SECRET);
-
-    if (!decodeToken.isAdmin) {
-      return NextResponse.json(
-        { message: "You are not Admin" },
-        { status: 200 }
+        { message: adminCheck.error },
+        { status: adminCheck.status }
       );
     }
 
@@ -81,7 +57,6 @@ export async function POST(request) {
       performanceReview,
     });
 
-    console.log(newEmployee, "added-employee");
     await newEmployee.save();
 
     return NextResponse.json(
@@ -98,27 +73,15 @@ export async function POST(request) {
 
 export async function PUT(request) {
   try {
-    await connectDB();
-    const token = request.cookies.get("token")?.value;
-
-    if (!token) {
+    const adminCheck = await verifyAdmin(request);
+    if (adminCheck.error) {
       return NextResponse.json(
-        { message: "You are not logged in" },
-        { status: 400 }
-      );
-    }
-
-    const decodeToken = jwt.verify(token, process.env.JWT_SECRET);
-
-    if (!decodeToken.isAdmin) {
-      return NextResponse.json(
-        { message: "You are not Admin" },
-        { status: 200 }
+        { message: adminCheck.error },
+        { status: adminCheck.status }
       );
     }
 
     const { userID, ...updateFields } = await request.json();
-
     if (!userID) {
       return NextResponse.json(
         { message: "Employee ID is required" },
@@ -131,7 +94,6 @@ export async function PUT(request) {
       updateFields,
       { new: true }
     );
-
     if (!updatedEmployee) {
       return NextResponse.json(
         { message: "Employee not found" },
@@ -153,27 +115,15 @@ export async function PUT(request) {
 
 export async function DELETE(request) {
   try {
-    await connectDB();
-    const token = request.cookies.get("token")?.value;
-
-    if (!token) {
+    const adminCheck = await verifyAdmin(request);
+    if (adminCheck.error) {
       return NextResponse.json(
-        { message: "You are not logged in" },
-        { status: 400 }
-      );
-    }
-
-    const decodeToken = jwt.verify(token, process.env.JWT_SECRET);
-
-    if (!decodeToken.isAdmin) {
-      return NextResponse.json(
-        { message: "You are not Admin" },
-        { status: 200 }
+        { message: adminCheck.error },
+        { status: adminCheck.status }
       );
     }
 
     const { userID } = await request.json();
-
     if (!userID) {
       return NextResponse.json(
         { message: "Employee ID is required" },
@@ -181,9 +131,8 @@ export async function DELETE(request) {
       );
     }
 
-    const deletedUser = await Employee.findByIdAndDelete(userID);
-
-    if (!deletedUser) {
+    const deletedEmployee = await Employee.findByIdAndDelete(userID);
+    if (!deletedEmployee) {
       return NextResponse.json(
         { message: "Employee not found" },
         { status: 404 }
@@ -191,7 +140,7 @@ export async function DELETE(request) {
     }
 
     return NextResponse.json(
-      { message: "Employee Deleted successfully!", deletedUser },
+      { message: "Employee deleted successfully!", deletedEmployee },
       { status: 200 }
     );
   } catch (error) {
