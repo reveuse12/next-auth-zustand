@@ -38,7 +38,6 @@ const Page = () => {
           employees: employee.data.employees,
         });
       } catch (error) {
-        console.error(error);
         toast.error("Something went wrong");
       }
     };

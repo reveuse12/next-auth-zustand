@@ -205,7 +205,7 @@ const EmployeeDialog = ({ triggerText, employee, onSave, className }) => {
             onClick={handleSave}
             className="bg-primary text-white rounded-lg py-2 px-4 hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
           >
-            Save changes
+            {employee ? "Save" : "Add"}
           </Button>
         </DialogFooter>
       </DialogContent>
